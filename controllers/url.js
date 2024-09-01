@@ -13,7 +13,9 @@ export async function generateShortUrl(req,res){
     visitHistory:[]
    })
 
-   return res.json({id:shortId});
+   let urls = await URL.find({})
+
+   return res.render('home',{id:shortId,urls})
 }
 
 export async function getCompleteUrl(req,res){
