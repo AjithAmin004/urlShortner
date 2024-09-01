@@ -1,13 +1,23 @@
+//do pagination while displaying tables
+//add linting also
+import path from 'path'
 import express from 'express'
+import 'dotenv/config'
 import router from './routes/url.js'
+import staticRouter from './routes/static.js'
 import { connectMongoDB } from './connect.js'
 const app = express()
 
-connectMongoDB('mongodb://127.0.0.1:27017/short-url')
+connectMongoDB(process.env.MONGO_URL)
 .then(()=>console.log('database connected successfully'))
 .catch((error)=> console.log(`error occured ${error}`))
+
+app.set('view engine',"ejs");
+app.set('views',path.resolve('./views'))
+
 app.use(express.json())
-app.use(express.static('public')) //file path here doesnt includes the folder name , that ie relative url will not include foldername
+app.use(express.urlencoded({extended:false}))
 app.use('/url',router)
+app.use('/',staticRouter)
 
 app.listen(3000)
