@@ -3,6 +3,9 @@
 //add linting also
 //add dockerrfile
 //add readme
+//error handling
+//user input validation
+//ui for signup and login
 import path from 'path'
 import express from 'express'
 import 'dotenv/config'
