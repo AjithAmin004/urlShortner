@@ -19,10 +19,10 @@
   <body>
     <h1>URL Shortner</h1>
     <% if (locals.id) { %>
-    <h3>URL Generated: http://127.0.0.1:3000/url/<%= id %></h3>
+    <h3>URL Generated: http://127.0.0.1:3000/url/getfullurl/<%= id %></h3>
     <% delete id %> <% } %>
     <div>
-      <form action="/url/" method="post" id="myForm">
+      <form action="/url/generate" method="post" id="myForm">
         <label>Enter your original URL</label>
         <input type="text" name="url" placeholder="https://youtube.com" />
         <button type="submit">Generate</button>
@@ -30,7 +30,7 @@
     </div>
     <br />
     <div>
-      <% if (locals.urls) { %>
+      <% if (locals.urls.length>0) { %>
       <table>
         <thead>
           <th>S. No</th>
