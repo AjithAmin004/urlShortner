@@ -2,18 +2,20 @@ import { nanoid } from "nanoid";
 import URL from "../models/url.js";
 
 export async function generateShortUrl(req,res){
+    console.log("hi",req.user)
     const {url} = req.body;
     if(!url){
        return res.status(400).json({error:'URL not found in request body'})
     }
    const shortId = nanoid(8);
    await URL.create({
+    user_id:req.user.id,
     shortId,
     redirectURL:url,
-    visitHistory:[]
+    visitHistory:[],
    })
 
-   let urls = await URL.find({})
+   let urls = await URL.find({user_id:req.user.id,})
 
    return res.render('home',{id:shortId,urls})
 }
@@ -25,7 +27,7 @@ export async function getCompleteUrl(req,res){
     }
 
     let completeUrl = await URL.findOneAndUpdate(
-    {shortId:url},
+    {shortId:url,user_id:req.user.id,},
     {
         $push:{
             visitHistory:{
@@ -42,6 +44,6 @@ export async function getAnalytics(req,res){
        return res.status(400).json({error:'please provide a proper short url'})
     }
 
-    let result = await URL.findOne({shortId}).select('visitHistory')
+    let result = await URL.findOne({shortId,user_id:req.user.id,}).select('visitHistory')
     return res.status(200).json({TotalClicks:result.visitHistory.length,visitHistory:result.visitHistory})
 }
